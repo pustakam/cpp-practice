@@ -61,3 +61,43 @@ TEST(MetaProgramming, is_prime)
     // ASSERT_TRUE(is_prime(20.5));
 }
 
+TEST(MetaProgramming, sum)
+{
+    ASSERT_TRUE(sum(1) == 1);
+    ASSERT_TRUE(sum(1, 2) == 3);
+    ASSERT_TRUE(sum(1, 2, 3) == 6);
+    ASSERT_TRUE(sum(1, 2, 3, 4) == 10);
+
+    static_assert(std::is_same<decltype(sum(-7, 3.7f, 9u, -2.6)), double>::value,
+            "Incorrect sum return type");
+    ASSERT_NEAR(sum(-7, 3.7f, 9u, -2.6), 3.1, 0.01);
+}
+
+TEST(MetaProgramming, my_is_const)
+{
+    ASSERT_FALSE(my_is_const<int>::value);
+    ASSERT_TRUE(my_is_const<const int>::value);
+}
+
+TEST(MetaProgramming, my_conditional)
+{
+    // gtest macro does not like single parenthesis
+
+    ASSERT_TRUE((std::is_same<typename my_conditional<true, int, double>::type, int>::value));
+    ASSERT_TRUE((std::is_same<typename my_conditional<false, int, double>::type, double>::value));
+}
+
+TEST(MetaProgramming, fibo)
+{
+    ASSERT_TRUE(fibo<0>::value == 0);
+    ASSERT_TRUE(fibo<1>::value == 1);
+    ASSERT_TRUE(fibo<2>::value == 1);
+    ASSERT_TRUE(fibo<3>::value == 2);
+    ASSERT_TRUE(fibo<4>::value == 3);
+    ASSERT_TRUE(fibo<5>::value == 5);
+    ASSERT_TRUE(fibo<6>::value == 8);
+
+    ASSERT_TRUE(fibo<11>::value == 89);
+    ASSERT_TRUE(fibo<14>::value == 377);
+}
+

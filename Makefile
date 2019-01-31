@@ -16,8 +16,12 @@ SRCS := $(shell find $(SRC_DIRS) -name *.cpp)
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 DEPS := $(OBJS:.o=.d)
 
+OS := $(shell uname)
 CXX := clang++
-#CXX := g++
+#ifeq ($(OS),Linux)
+#	CXX := g++
+#endif
+
 CXXFLAGS := -std=c++14 -Wall -Wextra -Wpedantic -g -fsanitize=address -fno-omit-frame-pointer -pthread
 LDFLAGS := -g -fsanitize=address -pthread
 
