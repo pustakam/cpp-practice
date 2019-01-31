@@ -23,15 +23,15 @@ constexpr T power(const T& x, unsigned int n)
     return x * power(x, n - 1);
 }
 
-template <typename T, typename = std::enable_if<std::is_integral<T>::value>>
+template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
 constexpr bool is_prime_odd_div(T x, T div)
 {
     return div >= x ? true :
         (x % div == 0 ? false : is_prime_odd_div(x, div + 2));
 }
 
-template <typename T, typename = std::enable_if<std::is_integral<T>::value>>
-constexpr bool is_prime(T x)
+template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
+constexpr bool is_prime(const T x)
 {    
     return x == 1 ? false :
         (x % 2 == 0 ? x == 2 : is_prime_odd_div(x, 3)); 

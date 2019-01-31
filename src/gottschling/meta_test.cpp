@@ -56,5 +56,8 @@ TEST(MetaProgramming, is_prime)
     static_assert(!is_prime(1003), "is_prime is not compile time");
 
     ASSERT_TRUE(is_prime(10007));
+
+    // This will not compile since we are checking for integral types
+    // ASSERT_TRUE(is_prime(20.5));
 }
 
