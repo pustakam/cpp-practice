@@ -53,3 +53,10 @@ TEST(Sommerlad, Sack)
     }
 }
 
+TEST(Sommerlad, array_to_tuple)
+{
+    ASSERT_TRUE(array_to_tuple(std::array<char, 3>{'a', 'b', 'c'}) == std::make_tuple('a', 'b', 'c')); 
+
+    ASSERT_TRUE(array_to_tuple(std::array<int, 4>{1,2,3,4}) == std::make_tuple(1,2,3,4)); 
+}
+
