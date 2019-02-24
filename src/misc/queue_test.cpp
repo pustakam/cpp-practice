@@ -65,7 +65,7 @@ void consumer(Queue<Msg>& q, const int id)
     std::cout << "consumer=" << id << ", exiting" << std::endl;
 }
 
-int testme(int argc, char* argv[])
+static int testme()
 {
     Queue<Msg> q;
     using vector_t = std::vector<std::thread>;

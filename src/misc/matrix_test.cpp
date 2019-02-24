@@ -6,7 +6,7 @@
 
 #include "matrix.hpp"
 
-int testme(int argc, char* argv[])
+static int testme()
 {
     Matrix<double, 5, 10> m1{3};
     /*

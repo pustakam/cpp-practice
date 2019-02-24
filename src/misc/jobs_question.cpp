@@ -94,7 +94,7 @@ optional<ChainsMap> read_chains_map(istream& is)
     return make_optional(chains_map);
 }
 
-int testme(int argc, char* argv[])
+static int testme()
 {
     auto maybe_chains_map = read_chains_map(cin);
     if (!maybe_chains_map)

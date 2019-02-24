@@ -22,7 +22,7 @@ CXX := clang++
 #	CXX := g++
 #endif
 
-CXXFLAGS := -std=c++14 -Wall -Wextra -Wpedantic -g -fsanitize=address -fno-omit-frame-pointer -pthread
+CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -g -fsanitize=address -fno-omit-frame-pointer -pthread
 LDFLAGS := -g -fsanitize=address -pthread
 
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))

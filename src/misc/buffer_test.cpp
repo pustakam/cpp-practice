@@ -6,7 +6,7 @@
 
 #include "buffer.hpp"
 
-int testme(int argc, char* argv[])
+static int testme()
 {
     std::vector<Buffer<int>> buf_vec;
     buf_vec.reserve(8);
