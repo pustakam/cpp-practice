@@ -33,16 +33,16 @@ private:
     BucketElement* end(size_t i);
     const BucketElement* end(size_t i) const;
 
-    static size_t next_pow_2(size_t n);
-    static BucketElement** create_bucket_array(size_t bucket_array_size, size_t bucket_size);
-    static void destroy_bucket_array(BucketElement** bucket_array, size_t bucket_array_size);
+    size_t next_pow_2(size_t n);
+    BucketElement** create_bucket_array(size_t bucket_array_size, size_t bucket_size);
+    void destroy_bucket_array(BucketElement** bucket_array, size_t bucket_array_size);
 
-    size_t index(uint64_t extID, size_t bucket_array_size) const
+    size_t index(uint64_t extID, size_t bucket_array_size)
     { return extID % bucket_array_size; }
 
-    size_t new_bucket_size(size_t old_bucket_size) const
+    size_t new_bucket_size(size_t old_bucket_size)
     { return 2 * old_bucket_size; }
-    size_t new_bucket_array_size(size_t old_bucket_array_size) const
+    size_t new_bucket_array_size(size_t old_bucket_array_size)
     { return 2 * old_bucket_array_size; }
 
     void rehash();
