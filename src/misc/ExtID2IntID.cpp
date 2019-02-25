@@ -1,6 +1,17 @@
 #include <utility>
+#include <stdexcept>
 
 #include "ExtID2IntID.hpp"
+
+size_t
+ExtID2IntID::next_pow_2(size_t n)
+{
+    size_t v{1};
+    while (v <= n)
+        v = v << 1;
+
+    return v;
+}
 
 ExtID2IntID::BucketElement**
 ExtID2IntID::create_bucket_array(size_t bucket_array_size, size_t bucket_size)
@@ -23,17 +34,30 @@ ExtID2IntID::destroy_bucket_array(ExtID2IntID::BucketElement** bucket_array, siz
     delete [] bucket_array;
 }
 
-ExtID2IntID::ExtID2IntID()
-    : bucket_size_{8},
-    bucket_array_size_{1024},
+ExtID2IntID::ExtID2IntID(size_t bucket_array_size, size_t bucket_size)
+    : bucket_array_size_{next_pow_2(bucket_array_size)},
+    bucket_size_{next_pow_2(bucket_size)},
     bucket_array_{}
 {
+    if (bucket_array_size_ == 0 || bucket_size_ == 0)
+        throw std::invalid_argument("bucket_array_size_ == 0 || bucket_size_ == 0");
+    
     bucket_array_ = create_bucket_array(bucket_array_size_, bucket_size_);
 }
 
 ExtID2IntID::~ExtID2IntID()
 {
     destroy_bucket_array(bucket_array_, bucket_array_size_);
+}
+
+ExtID2IntID::ExtID2IntID(ExtID2IntID&& other)
+    : bucket_array_size_{other.bucket_array_size_},
+    bucket_size_{other.bucket_size_},
+    bucket_array_{std::move(other.bucket_array_)}
+{
+    other.bucket_array_size_ = 0;
+    other.bucket_size_ = 0;
+    other.bucket_array_ = nullptr;
 }
 
 ExtID2IntID::BucketElement*
