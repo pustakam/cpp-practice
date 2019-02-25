@@ -1,9 +1,8 @@
-#include <cassert>
 #include <utility>
 
 #include "ExtID2IntID.hpp"
 
-BucketElement**
+ExtID2IntID::BucketElement**
 ExtID2IntID::create_bucket_array(size_t bucket_array_size, size_t bucket_size)
 {
     BucketElement** bucket_array = new BucketElement*[bucket_array_size];
@@ -15,7 +14,7 @@ ExtID2IntID::create_bucket_array(size_t bucket_array_size, size_t bucket_size)
 }
 
 void
-ExtID2IntID::destroy_bucket_array(BucketElement** bucket_array, size_t bucket_array_size)
+ExtID2IntID::destroy_bucket_array(ExtID2IntID::BucketElement** bucket_array, size_t bucket_array_size)
 {
     for (size_t i = 0; i < bucket_array_size; ++i)
     {
@@ -37,34 +36,56 @@ ExtID2IntID::~ExtID2IntID()
     destroy_bucket_array(bucket_array_, bucket_array_size_);
 }
 
-size_t
-ExtID2IntID::index(uint64_t extID, size_t bucket_array_size)
-{
-    return extID % bucket_array_size;
-}
-
-BucketElement*
+ExtID2IntID::BucketElement*
 ExtID2IntID::begin(size_t i)
 {
     return bucket_array_[i];
 }
 
-const BucketElement*
+const ExtID2IntID::BucketElement*
 ExtID2IntID::begin(size_t i) const
 {
     return bucket_array_[i];
 }
 
-BucketElement*
+ExtID2IntID::BucketElement*
 ExtID2IntID::end(size_t i)
 {
     return bucket_array_[i] + bucket_size_;
 }
 
-const BucketElement*
+const ExtID2IntID::BucketElement*
 ExtID2IntID::end(size_t i) const
 {
     return bucket_array_[i] + bucket_size_;
+}
+
+void
+ExtID2IntID::rehash()
+{
+    size_t old_bucket_size = bucket_size_;
+    size_t old_bucket_array_size = bucket_array_size_;
+    BucketElement** old_bucket_array = bucket_array_;
+
+    bucket_size_ = new_bucket_size(old_bucket_size);
+    bucket_array_size_ = new_bucket_array_size(old_bucket_array_size);
+    bucket_array_ = create_bucket_array(bucket_array_size_, bucket_size_);
+
+    for (size_t i = 0; i < old_bucket_array_size; ++i)
+    {
+        const BucketElement* element = old_bucket_array[i];
+        const BucketElement* end = old_bucket_array[i] + old_bucket_size;
+        while (element != end)
+        {
+            if (element->extID == 0)
+                break;
+
+            insert(element->extID, element->intID);
+            ++element;
+        }
+    }
+
+    destroy_bucket_array(old_bucket_array, old_bucket_array_size);
 }
 
 void
@@ -73,8 +94,14 @@ ExtID2IntID::insert(uint64_t extID, uint64_t intID)
     if (extID == 0 || intID == 0)
         return;
 
-    size_t idx = index(extID, bucket_array_size_);
+    size_t maybe_rehash_idx = index(extID, bucket_array_size_);
+    BucketElement* last_element = end(maybe_rehash_idx) - 1;
+    if (last_element->extID != 0)
+    {
+        rehash();
+    }
 
+    size_t idx = index(extID, bucket_array_size_);
     BucketElement* element = begin(idx);
     while (element != end(idx))
     {
@@ -86,9 +113,6 @@ ExtID2IntID::insert(uint64_t extID, uint64_t intID)
         }
         ++element;
     }
-
-    // TODO: Have to rehash
-    // exit(1);
 }
 
 void
