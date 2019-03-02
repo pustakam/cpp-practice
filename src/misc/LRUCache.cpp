@@ -21,7 +21,7 @@ class Cache{
    
    protected: 
    map<int,Node*> mp; //map the key to the node in the linked list
-   int cp;  //capacity
+   size_t cp;  //capacity
    Node* tail; // double linked list tail pointer
    Node* head; // double linked list head pointer
    virtual void set(int, int) = 0; //set function
@@ -54,7 +54,7 @@ ostream& operator<<(ostream& os, Node* node)
 
 class LRUCache : public Cache {
 public:
-    LRUCache(int capacity)
+    LRUCache(size_t capacity)
     {
         assert(capacity >= 1 && capacity <= 1000);
         mp = {};
@@ -212,8 +212,8 @@ get 5
          l.set(key,value);
       }
    }
-   return 0;
    */
+   return 0;
 }
 
 

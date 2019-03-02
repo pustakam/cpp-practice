@@ -13,7 +13,7 @@ public:
     ExtID2IntID(const ExtID2IntID&) = delete;
     ExtID2IntID& operator=(const ExtID2IntID&) = delete;
 
-    ExtID2IntID(ExtID2IntID&&);
+    ExtID2IntID(ExtID2IntID&& other);
     ExtID2IntID& operator=(ExtID2IntID&&) = delete;
 
     void insert(uint64_t extID, uint64_t intID);
